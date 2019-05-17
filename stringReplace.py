@@ -1,5 +1,10 @@
 #!/usr/bin/python3
 
+# Name: stringReplace.py
+# Description: Used to search and replace a string from within a file
+# Author: Kaspyr K.
+# Date: May 17, 2019
+
 from datetime import datetime
 import re, sys
 
@@ -21,7 +26,6 @@ def stringSearch(filename, oldWord, newWord, nFName):
         listOfLines = orgFile.readlines()
         for line in listOfLines:
             if oldWord not in line:
-                #line = line.replace(oldWord, newWord)
                 fileAppending(line, nFName)
             else:
                 line = re.sub(oldWord, newWord, line)
