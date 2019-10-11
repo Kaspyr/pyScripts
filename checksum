@@ -1,0 +1,52 @@
+#!/usr/bin/python3
+
+import hashlib
+from sys import argv
+
+# Checking that the correct amount of arguments are given
+def argCheck():
+    if len(argv) != 4:
+        exit("Format <checksum 1> <hash> <File to Hash>")
+
+# Check which hashing algorithm is being used
+def hash_alg():
+    hash = {
+        "md5": hashlib.md5(),
+        "sha1": hashlib.sha1(),
+        "sha256": hashlib.sha256(),
+        "sha512": hashlib.sha512()
+    }
+    return hash.get(argv[2], lambda: "Invalid Entry")
+			
+
+# Preforming the Hash of the file
+def hash_function():
+    hash = hash_alg()
+    print(hash)
+	# Opens the file as read and saves it into a buffer
+    with open(argv[3], 'rb') as f:
+        while True:
+            data = f.read(65536)
+            if not data:
+                break
+            hash.update(data)
+
+	# Returning a hexidecimal string of the hashing
+    return hash.hexdigest()
+
+
+# Preforms the Check of the submitted hash with the hash of the file
+def hash_check(new_hash):
+    #print(f"urlhash: {argv[1].strip()}\nnew_hash: {new_hash}")
+    if argv[1].strip() == new_hash:
+        print("\033[1;32;40mThe checksums match. You are safe to use this file.")
+    elif argv[1].strip() != new_hash:
+        print("\033[1;31;40mThe checksums do not match. \
+		The file is not safe to use without further investigation")
+    else:
+	    exit("\033[1;31;40mAn error has occured in the code")
+
+if __name__ == "__main__":
+    argCheck()
+    new_hash = hash_function()
+    hash_check(new_hash)
